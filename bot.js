@@ -1,5 +1,4 @@
-// Supports ES6
-// import { create, Whatsapp } from 'venom-bot';
+import axios from 'axios'
 import venom from 'venom-bot'
 
 venom
@@ -12,16 +11,27 @@ venom
   });
 
 function start(client) {
-  client.onMessage((message) => {
-    if (message.body === 'Hi' && message.isGroupMsg === false) {
+  client.onMessage(async (message) => {
+    console.log(message)
+    if (typeof(message.body) === "string" && message.body.toUpperCase().includes('CEP')) {
+      const cep = message.body.substring(4).replace('-', '').trim()
+      let endereco =  await consultaCEP(cep)
+
       client
-        .sendText(message.from, 'Welcome Venom 🕷')
+        .sendText(message.from, endereco)
         .then((result) => {
-          console.log('Result: ', result); //return object success
+          console.log('Result: ', result);
         })
         .catch((erro) => {
-          console.error('Error when sending: ', erro); //return object error
+          console.error('Error when sending: ', erro);
         });
     }
   });
+}
+
+const consultaCEP = async (cep) => {
+  const response = (await axios.get(`https://viacep.com.br/ws/${cep}/json/`)).data
+
+  const endereco = `Endereço: ${response.logradouro}, ${response.localidade} - ${response.uf}`
+  return endereco
 }
