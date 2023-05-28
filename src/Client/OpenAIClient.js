@@ -27,6 +27,3 @@ export const sendMessageChatBot = async (message) => {
 
     return responseChat;
 }
-
-
-console.log(await sendMessageChatBot('Qual seu nome?'))
