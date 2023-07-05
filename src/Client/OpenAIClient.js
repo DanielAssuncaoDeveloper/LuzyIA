@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const sendMessageChatBot = async (message) => {
-    const apiKey = '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';
+    const apiKey = process.env.OPENAI_KEY;
     const url = "https://api.openai.com/v1/chat/completions";
     const bodyParameters = {
         model: 'gpt-3.5-turbo',
